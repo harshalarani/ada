@@ -1,102 +1,79 @@
-#include<stdio.h>
+ #include<stdio.h>
 #include<time.h>
 #include<stdlib.h>
-void merge(int arr[],int l,int r,int m)
+void conquor(int arr[], int s,int mid,int e)
 {
-    int i,j,k;
-
-    int n1=m-l+1;
-    int n2=r-m;
-    int left[n1], right[n2];
-    for(i=0;i<n1;i++)
+    int merged[e-s+1];
+    int i1=s;
+    int i2=mid+1;
+    int x=0;
+    while(i1<=mid && i2<=e)
     {
-        left[i]=arr[l+i];
-    }
-    for(j=0;j<n2;j++)
-    {
-        right[j]=arr[m+1+j];
-    }
-    i=0;
-    j=0;
-    k=l;
-    while(i<n1 && j<n2)
-    {
-        if(left[i]<=right[j])
+        if(arr[i1]<=arr[i2])
         {
-            arr[k]=left[i];
-            i++;
+            merged[x]=arr[i1];
+            x++;
+            i1++;
         }
         else
         {
-            arr[k]=right[j];
-            j++;
+            merged[x]=arr[i2];
+            x++;
+            i2++;
         }
-        k++;
     }
-    while(i<n1)
+    while(i1<=mid)
     {
-        arr[k]=left[i];
-        i++;
-        k++;
+        merged[x]=arr[i1];
+        x++;
+        i1++;
     }
-    while(j<n2)
+    while(i2<=e)
     {
-        arr[k]=right[j];
-        j++;
-        k++;
+        merged[x]=arr[i2];
+        x++;
+        i2++;
     }
-}
-void mergesort(int arr[], int l, int r)
-{
-    int mid;
-    if(l<r)
+    for(int i=0;i<x;i++)
     {
-        mid=l+(r-l)/2;
-        mergesort(arr,l,mid);
-        mergesort(arr,mid+1,r);
-        merge(arr,l,r,mid);
+        arr[i+s]=merged[i];
     }
-}
-void print(int arr[],int n)
-{
-    int i;
-    for(i=0;i<n;i++)
-    {
-        printf("%d\t",arr[i]);
-    }
-}
 
+}
+void divide(int arr[], int s, int e)
+{
+    if(s>=e)
+    return;
+    int mid=s+(e-s)/2;
+    divide(arr,s,mid);
+    divide(arr,mid+1,e);
+    conquor(arr,s,mid,e);
+}
 void main()
 {
-    int arr[200000],n,i;
     clock_t st,et;
-    float ts;
-    printf("Enter the size of the array\n");
-    scanf("%d",&n);
-    for(i=0;i<n;i++)
+    double ts;
+    int n= rand()%100+50; // General formala is: rand()%range+min
+    printf("Size of array:%d\n",n);
+    int arr[n];
+    for(long i=0;i<n;i++)
     {
-        arr[i]=rand();
+        arr[i]=rand()%100+1;//random number from 1 to 100
     }
-    if(n<=20)
+    /*printf("Original array:\n");
+    for(int i=0;i<n;i++)
     {
-    	printf("before sorting \n");
-        print(arr,n);
-	}
-   
+        printf("%d ",arr[i]);
+    }
+    printf("\n");*/
     st=clock();
-  
-    mergesort(arr,0,n-1);
-
+    divide(arr,0,n-1);
     et=clock();
-    ts=(float)(et-st)/CLOCKS_PER_SEC;
-    if(n<=20)
+    ts=(double)((et-st)/CLOCKS_PER_SEC);
+    printf("Sorted array:\n");
+    for(long i=0;i<n;i++)
     {
-    	printf("\nafter sorting using mergesort\n");
-        print(arr,n);
-	}
-   
-    //print(arr,n);
-    printf("\nTime taken \t %f ",ts);
-
-
+        printf("%d ",arr[i]);
+    }
+    printf("\nThe time taken for merge sort is: %f\n",ts);
 }
