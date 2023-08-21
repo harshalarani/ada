@@ -1,0 +1,27 @@
+#include<stdio.h>
+  int a[20][20],vis[20];
+void dfs(int v,int n){
+    vis[v]=1;
+     printf("%d\t", v);
+     for(int i=0;i<n;i++){
+    if(a[v][i]==1 && vis[i]==0)
+   dfs(i,n);}
+}
+ void main(){
+     int n;
+ 
+  printf("Enter the no of vertices");
+  scanf("%d",&n);
+  printf("Enter the adjacent matrix");
+  for(int i=0;i<n;i++)
+  {
+      for(int j=0;j<n;j++)
+      {
+           scanf("%d",&a[i][j]);
+      }
+  }
+   for(int i=0;i<n;i++)
+   vis[i]=0;
+   dfs(0,n);
+ 
+ }
