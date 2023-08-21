@@ -1,76 +1,79 @@
-#include<stdio.h>
+ #include<stdio.h>
 #include<time.h>
 #include<stdlib.h>
-void swap(int *a,int *b)
+void conquor(int arr[], int s,int mid,int e)
 {
-    int temp;
-    temp=*a;
-    *a=*b;
-    *b=temp;
-}
-int partition(int arr[],int l,int r)
-{
-    //ascending order
-    int pivot=arr[r];
-    int i=l-1,j;
-    for(j=l;j<=r-1;j++)
+    int merged[e-s+1];
+    int i1=s;
+    int i2=mid+1;
+    int x=0;
+    while(i1<=mid && i2<=e)
     {
-        if(arr[j]<pivot)
+        if(arr[i1]<=arr[i2])
         {
-            i++;
-            swap(&arr[i],&arr[j]);
+            merged[x]=arr[i1];
+            x++;
+            i1++;
+        }
+        else
+        {
+            merged[x]=arr[i2];
+            x++;
+            i2++;
         }
     }
-    swap(&arr[i+1],&arr[r]);
-    return (i+1);
+    while(i1<=mid)
+    {
+        merged[x]=arr[i1];
+        x++;
+        i1++;
+    }
+    while(i2<=e)
+    {
+        merged[x]=arr[i2];
+        x++;
+        i2++;
+    }
+    for(int i=0;i<x;i++)
+    {
+        arr[i+s]=merged[i];
+    }
 
 }
-void quicksort(int arr[],int l,int r)
+void divide(int arr[], int s, int e)
 {
-    int split;
-    if(l<r)
-    {
-        split=partition(arr,l,r);
-        quicksort(arr,l,split-1);
-        quicksort(arr,split+1,r);
-    }
-}
-void print(int arr[],int n)
-{
-    int i;
-    for(i=0;i<n;i++)
-    {
-        printf("%d\t",arr[i]);
-    }
+    if(s>=e)
+    return;
+    int mid=s+(e-s)/2;
+    divide(arr,s,mid);
+    divide(arr,mid+1,e);
+    conquor(arr,s,mid,e);
 }
 void main()
 {
-    int arr[200000],n,i;
     clock_t st,et;
-    float ts;
-    printf("Enter the size of the array\n");
-    scanf("%d",&n);
-    for(i=0;i<n;i++)
+    double ts;
+    int n= rand()%100+50; // General formala is: rand()%range+min
+    printf("Size of array:%d\n",n);
+    int arr[n];
+    for(long i=0;i<n;i++)
     {
-        arr[i]=rand();
+        arr[i]=rand()%100+1;//random number from 1 to 100
     }
-    if(n<=20)
+    /*printf("Original array:\n");
+    for(int i=0;i<n;i++)
     {
-    	printf("before sorting \n");
-        print(arr,n);
-	}
+        printf("%d ",arr[i]);
+    }
+    printf("\n");*/
     st=clock();
-    //print(arr,n);
-    quicksort(arr,0,n-1);
+    divide(arr,0,n-1);
     et=clock();
-    ts=(float)(et-st)/CLOCKS_PER_SEC;
-    if(n<=20)
+    ts=(double)((et-st)/CLOCKS_PER_SEC);
+    printf("Sorted array:\n");
+    for(long i=0;i<n;i++)
     {
-    	printf("\nafter sorting using quicksort\n");
-        print(arr,n);
-	}
-   
-    printf("\nTime taken \t %f ",ts);
-
-
+        printf("%d ",arr[i]);
+    }
+    printf("\nThe time taken for merge sort is: %f\n",ts);
 }
