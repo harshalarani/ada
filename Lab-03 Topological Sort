@@ -1,0 +1,32 @@
+#include<stdio.h>
+int vis[30],a[30][30],n;
+int exo[30];
+int j=0;
+void dfs(int v)
+{
+
+vis[v]=1;
+for(int i=0;i<n;i++){
+if(a[v][i]==1 && vis[i]==0)
+dfs(i);
+}
+exo[j++]=v;
+}
+void main(){
+printf("Enter the no of nodes");
+scanf("%d",&n);
+ 
+    for (int i = 0; i < n; i++) {
+        vis[i] = 0; 
+    }
+printf("Enter the adjacency matrix");
+for(int i=0;i<n;i++){
+    for(int j=0;j<n;j++){
+        scanf("%d",&a[i][j]);
+    }
+}
+dfs(0);
+printf("The topological order is: ");
+for(int i=n-1;i>=0;i--)
+printf("%d",exo[i]);
+}
