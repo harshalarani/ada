@@ -1,0 +1,56 @@
+#include<stdio.h>
+void main(){
+    int n,c;
+    int w[40];
+    int p[40];
+    printf("Enter the no of items");
+    scanf("%d",&n);
+    printf("Enter the weight of each item");
+    for(int i=0;i<n;i++){
+        scanf("%d",&w[i]);
+    }
+ printf("Enter the profit of each item");
+    for(int i=0;i<n;i++){
+        scanf("%d",&p[i]);
+    }
+printf("Enter the capacity ");
+scanf("%d",&c);
+int v[n+1][c+1];
+for(int i=0;i<=n;i++)
+{
+    for(int j=0;j<=c;j++){
+        if(i==0||j==0){
+            v[i][j]=0;
+        }
+        else {
+        if(j<w[i-1])
+        v[i][j]=v[i-1][j];
+        else if(j>=w[i-1])
+        {
+            if(v[i-1][j]>(v[i-1][j-w[i-1]]+p[i-1]))
+            v[i][j]=v[i-1][j];
+            else
+            v[i][j]=(v[i-1][j-w[i-1]]+p[i-1]);
+        }
+        }   
+        
+    }
+}
+for(int i=0;i<=n;i++)
+{
+    for(int j=0;j<=c;j++){
+    printf("%d\t",v[i][j]);
+    
+}
+printf("\n");}
+    printf("Maximum profit is %d",v[n][c]);
+     int i = n, j = c;
+    printf("Selected items: ");
+    while (i > 0 && j > 0) {
+        if (v[i][j] != v[i - 1][j]) {
+            printf("%d ", i - 1); // Print 0-based index of the selected item
+            j -= w[i - 1]; // Subtract weight from capacity
+        }
+        i--;}
+}
+
