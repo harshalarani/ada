@@ -1,0 +1,92 @@
+#include<stdio.h>
+#define RtoL 0
+#define LtoR 1
+void swap(int *a,int *b){
+    int temp;
+    temp=*a;
+    *a=*b;
+    *b=temp;
+}
+
+int fact(int n){
+    int result=1;
+    for(int i=1;i<=n;i++){
+        result=result*i;
+    }
+    return result;
+}
+int searchar(int a[],int n,int mobile){
+    for(int i=0;i<n;i++){
+        if(a[i]==mobile)
+        return i+1;
+    }
+}
+int getmobile(int a[],int dir[],int n)
+{
+    int mobile_p=0,mobile=0;
+    for(int i=0;i<n;i++){
+        if(dir[a[i]-1]==RtoL && i!=0){
+            if(a[i]>a[i-1] && a[i]>mobile_p){
+                mobile_p=mobile;
+                mobile=a[i];
+            }
+        }
+        if(dir[a[i]-1]==LtoR &&i!=n-1){
+            if(a[i]>a[i+1] && a[i]>mobile_p)
+            {
+                   mobile_p=mobile;
+                mobile=a[i];
+            }
+        }
+    }
+return mobile;    
+}
+
+void printoneperm(int a[],int dir[],int n){
+    
+int mobile=getmobile(a,dir,n);
+int pos=searchar(a,n,mobile);
+
+if(dir[a[pos-1]-1]==RtoL)
+swap(&a[pos-1],&a[pos-2]);
+
+else if(dir[a[pos-1]-1]==LtoR)
+swap(&a[pos],&a[pos-1]);
+
+for(int i =0;i<n;i++)
+if(a[i]>mobile){
+    if(dir[a[i]-1]==RtoL)
+    dir[a[i]-1]=LtoR;
+    else if(dir[a[i]-1]==LtoR)
+    dir[a[i]-1]=RtoL;
+}
+
+for(int i=0;i<n;i++){
+    printf("%d",a[i]);
+}
+printf("\n");
+}
+
+
+
+void printperm(int n){
+    int a[2000], dir[2000];
+    for(int i=0;i<n;i++)
+    {
+        a[i]=i+1;
+        printf("%d",a[i]);
+    }
+    for(int i=0;i<=n;i++){
+        dir[i]=RtoL;
+    }
+    printf("\n");
+    for(int i=1;i<fact(n);i++){
+        printoneperm(a,dir,n);
+    }
+}
+void main(){
+    int n;
+    printf("Enter the number");
+    scanf("%d",&n);
+    printperm(n);
+}
