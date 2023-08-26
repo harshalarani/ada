@@ -26,7 +26,8 @@ int place(int r,int c){
     for(int i=1;i<r;i++){
         if(board[i]==c)
         return 0;
-         if(abs(board[i]-c)==abs(i-r))
+        
+ else if(abs(board[i]-c)==abs(i-r))
         return 0;
     }
     return 1;
